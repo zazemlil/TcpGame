@@ -11,9 +11,10 @@ public class Main {
         if (args.length == 2) {
             host = args[0];
             port = Integer.parseInt(args[1]);
+            System.out.println(host + " " + port);
         }
 
-        Socket socket = new Socket("localhost", 1234);
+        Socket socket = new Socket(host, port);
 
         PrintWriter outRequest = new PrintWriter(socket.getOutputStream(), true);
         ObjectOutputStream outObj = new ObjectOutputStream(socket.getOutputStream());
