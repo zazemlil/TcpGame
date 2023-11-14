@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(1234);
 
-        while(true) {
+        while(!serverSocket.isClosed()) {
             Socket clientSocket = serverSocket.accept();
             clients[clientId] = new ClientHandler(clientSocket, player, clientId);
             System.out.println("ClientId: " + clientId);

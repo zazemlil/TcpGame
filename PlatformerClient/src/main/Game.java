@@ -1,40 +1,31 @@
 package main;
 
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 public class Game implements Runnable {
-    private Thread thread;
     private GameField gameField;
     private final int FPS_SET = 240;
-    private Player player;
+    private PrintWriter outRequest = null;
 
     public Game(int width, int height) {
-        ArrayList<Player> enemy = new ArrayList<>();
-//        enemy.add(new Player(100, 200, 30, 30));
-//        enemy.add(new Player(200, 300, 30, 30));
-//        enemy.add(new Player(500, 400, 100, 150));
-        player = new Player(100, 100, 50, 50);
-        gameField = new GameField(player, enemy);
+        ArrayList<Player> players = new ArrayList<>();
+        gameField = new GameField(players);
         new GameWindow(gameField, width, height);
 
-        startGameLoop();
+        (new Thread(this)).start();
     }
 
-    private void startGameLoop() {
-        thread = new Thread(this);
-        thread.start();
-    }
-
-    public Player getPlayer() {
-        return player;
+    public void setAutoRequest(PrintWriter outRequest) {
+        this.outRequest = outRequest;
     }
 
     public GameField getGameField() {
         return gameField;
     }
 
-    public void setEnemies(ArrayList<Player> enemy) {
-        gameField.setEnemy(enemy);
+    public void setPlayers(ArrayList<Player> players) {
+        gameField.setPlayers(players);
     }
 
     @Override
@@ -47,6 +38,7 @@ public class Game implements Runnable {
         while (true) {
             now = System.nanoTime();
             if (now - lastFrame >= timePerFrame) {
+                outRequest.println("-");
                 gameField.repaint();
                 lastFrame = now;
                 frames++;

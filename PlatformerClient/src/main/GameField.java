@@ -6,26 +6,22 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.ListIterator;
 
 public class GameField extends JPanel {
-    private Player player;
-    private ArrayList<Player> enemy;
+    private ArrayList<Player> players;
     private KeyboardInput keyboardInput;
-    public GameField(Player player, ArrayList<Player> enemy) {
-        this.player = player;
-        this.enemy = enemy;
-        this.enemy.add(player);
+    public GameField(ArrayList<Player> players) {
+        this.players = players;
 
         this.setFocusable(true);
         this.requestFocusInWindow();
 
-        keyboardInput = new KeyboardInput(player);
+        keyboardInput = new KeyboardInput();
         this.addKeyListener(keyboardInput);
     }
 
-    public void setEnemy(ArrayList<Player> enemy) {
-        this.enemy = enemy;
+    public void setPlayers(ArrayList<Player> players) {
+        this.players = players;
     }
 
     public void setKeyboardStream(PrintWriter outWriter) {
@@ -35,11 +31,8 @@ public class GameField extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
-        player.updatePosition();
-        //g2d.draw(player.getTexture());
 
-        for (Player item : enemy) {
-            System.out.println(item.getX() + " " + item.getY());
+        for (Player item : players) {
             g2d.draw(item.getTexture());
         }
     }

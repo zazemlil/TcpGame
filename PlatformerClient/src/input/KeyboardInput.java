@@ -1,17 +1,12 @@
 package input;
 
-import main.Player;
-
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.PrintWriter;
 
 public class KeyboardInput implements KeyListener {
-    private Player player;
     PrintWriter outWriter = null;
-    public KeyboardInput(Player player) {
-        this.player = player;
-    }
+    public KeyboardInput() {}
 
     public void setStream(PrintWriter outWriter) {
         this.outWriter = outWriter;
