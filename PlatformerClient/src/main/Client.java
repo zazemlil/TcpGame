@@ -2,9 +2,15 @@ package main;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 
+
 public class Client {
+    private Socket socket;
+    private PrintWriter outRequest;
+    private ObjectInputStream inObj;
+    private Game game;
     private String host;
     private int port;
     public Client(String[] args) {
@@ -18,19 +24,26 @@ public class Client {
     }
 
     public void start() throws IOException, ClassNotFoundException {
-        Socket socket = new Socket(host, port);
+        socket = new Socket(host, port);
 
-        PrintWriter outRequest = new PrintWriter(socket.getOutputStream(), true);
-        ObjectOutputStream outObj = new ObjectOutputStream(socket.getOutputStream());
-        ObjectInputStream inObj = new ObjectInputStream(socket.getInputStream());
+        outRequest = new PrintWriter(socket.getOutputStream(), true);
 
-        Game game = new Game(800, 600);
+        game = new Game(800, 600, socket);
         game.setAutoRequest(outRequest);
         game.getGameField().setKeyboardStream(outRequest);
 
+        updatePlayers();
+    }
+
+    private void updatePlayers() throws IOException, ClassNotFoundException {
+        inObj = new ObjectInputStream(socket.getInputStream());
         ArrayList<Player> players;
-        while ((players = (ArrayList<Player>)inObj.readObject()) != null) {
-            game.setPlayers(players);
+        try {
+            while ((players = (ArrayList<Player>) inObj.readObject()) != null) {
+                game.setPlayers(players);
+            }
+        } catch (SocketException e) {
+            System.out.println("Socket exception");
         }
     }
 }

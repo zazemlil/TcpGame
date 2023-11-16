@@ -17,15 +17,23 @@ public class KeyboardInput implements KeyListener {
         switch (e.getKeyCode()) {
             case KeyEvent.VK_W:
                 outWriter.println(BUTTON_W);
+                outWriter.flush();
                 break;
             case KeyEvent.VK_A:
                 outWriter.println(BUTTON_A);
+                outWriter.flush();
                 break;
             case KeyEvent.VK_S:
                 outWriter.println(BUTTON_S);
+                outWriter.flush();
                 break;
             case KeyEvent.VK_D:
                 outWriter.println(BUTTON_D);
+                outWriter.flush();
+                break;
+            case KeyEvent.VK_SPACE:
+                outWriter.println(SPACE);
+                outWriter.flush();
                 break;
         }
     }
@@ -41,6 +49,7 @@ public class KeyboardInput implements KeyListener {
             case KeyEvent.VK_A:
             case KeyEvent.VK_S:
             case KeyEvent.VK_D:
+            case KeyEvent.VK_SPACE:
                 outWriter.println(DEFAULT);
                 break;
         }

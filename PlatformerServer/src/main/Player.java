@@ -1,51 +1,60 @@
 package main;
 
-import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.beans.Transient;
 import java.io.*;
 
+import static utilz.Constants.Directions.*;
 import static utilz.Constants.PlayerConstants.*;
 
 public class Player implements Serializable {
     @Serial
     private static final long serialVersionUID = -123456789L;
-    private int x, y, id;
-    private int sizeX, sizeY;
-    private Rectangle rectangle;
+    private float x, y;
+    private int id;
     private int playerAction = IDLE;
     private int aniIndex = 0;
     private transient int playerDir = -1;
-    private transient boolean moving = false;
-    private transient int aniTick = 0, aniSpeed = 135;
+    private transient boolean moving = false, shooting = false;
+    private transient int aniTick = 0, aniSpeed = 110;
+    private transient boolean isActive = true;
 
-
-    public Player(int x, int y, int sizeX, int sizeY) {
+    public Player(int x, int y) {
         id = -1;
         this.x = x;
         this.y = y;
-        this.sizeX = sizeX;
-        this.sizeY = sizeY;
-        rectangle = new Rectangle(x, y, sizeX, sizeY);
     }
 
-    @Transient
+    public void setActive(boolean b) {
+        isActive = b;
+    }
+
+    public boolean getActive() {
+        return isActive;
+    }
+
+    public void setPlayerDir(int dir) {
+        this.playerDir = dir;
+    }
+
     public void update() {
+        updatePosition();
         setAnimation();
         updateAnimationTick();
     }
 
-    @Transient
     private void setAnimation() {
-        if (moving) {
+        if (shooting) {
+            playerAction = ATTACK;
+        } else if (moving) {
             playerAction = RUNNING;
         } else {
             playerAction = IDLE;
         }
     }
 
-    @Transient
+    public void setShooting(boolean shooting) {
+        this.shooting = shooting;
+    }
+
     private void updateAnimationTick() {
         aniTick++;
         if (aniTick >= aniSpeed) {
@@ -53,61 +62,61 @@ public class Player implements Serializable {
             aniIndex++;
             if (aniIndex >= getSpriteAmount(playerAction)) {
                 aniIndex = 0;
+                if (playerAction == ATTACK) {
+                    this.setShooting(false);
+                }
             }
         }
     }
 
-    public Rectangle getTexture() {
-        return rectangle;
-    }
-
-    @Transient
-    public int getX() {
+    public float getX() {
         return x;
     }
 
-    @Transient
-    public int getY() {
+    public float getY() {
         return y;
     }
 
-    @Transient
-    public void setX(int x) {
+    public void setX(float x) {
         this.x = x;
     }
 
-    @Transient
-    public void setY(int y) {
+    public void setY(float y) {
         this.y = y;
     }
 
-    @Transient
     public void setId(int id) {
         this.id = id;
     }
 
-    @Transient
     public int getId() {
         return id;
     }
 
-    @Transient
-    public void move(int deltaX, int deltaY) {
+    public void move(float deltaX, float deltaY) {
         this.x += deltaX;
         this.y += deltaY;
     }
 
-    @Transient
-    public void updatePosition() {
-        rectangle.setLocation(x, y);
+    private void updatePosition() {
+        if (moving) {
+            switch (playerDir) {
+                case UP:
+                    this.move(0, -0.3f);
+                    break;
+                case LEFT:
+                    this.move(-0.3f, 0);
+                    break;
+                case DOWN:
+                    this.move(0, 0.3f);
+                    break;
+                case RIGHT:
+                    this.move(0.3f, 0);
+                    break;
+            }
+        }
     }
 
-    @Transient
-    public void setDirection(int direction) {
-        this.playerDir = direction;
-    }
-
-    @Transient
     public void setMoving(boolean moving) {
         this.moving = moving;
     }

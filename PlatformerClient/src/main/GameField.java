@@ -3,7 +3,6 @@ package main;
 import input.KeyboardInput;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -49,10 +48,8 @@ public class GameField extends JPanel {
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        Graphics2D g2d = (Graphics2D)g;
 
         for (Player item : players) {
-            //g2d.draw(item.getTexture());
             item.drawPlayer(g, texture);
         }
     }

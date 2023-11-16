@@ -7,6 +7,7 @@ public class Constants {
         public static final String BUTTON_A = "BUTTON_A_PRESSED";
         public static final String BUTTON_S = "BUTTON_S_PRESSED";
         public static final String BUTTON_D = "BUTTON_D_PRESSED";
+        public static final String SPACE = "BUTTON_SPACE_PRESSED";
     }
     public static class PlayerConstants {
         public static final int IDLE = 0;

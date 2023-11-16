@@ -1,10 +1,13 @@
 package main;
 
 import javax.swing.*;
+import java.net.Socket;
 
 public class GameWindow extends JFrame {
-    GameField gameField;
-    public GameWindow(GameField gameField, int width, int height) {
+    private Socket socket;
+    private GameField gameField;
+    public GameWindow(Socket socket, GameField gameField, int width, int height) {
+        this.socket = socket;
         this.gameField = gameField;
 
         JFrame window = new JFrame();

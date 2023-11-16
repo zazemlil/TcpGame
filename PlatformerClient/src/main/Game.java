@@ -1,17 +1,20 @@
 package main;
 
 import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.ArrayList;
 
 public class Game implements Runnable {
+    private Socket socket;
     private GameField gameField;
-    private final int FPS_SET = 1000;
+    private final int FPS_SET = 500;
     private PrintWriter outRequest = null;
 
-    public Game(int width, int height) {
+    public Game(int width, int height, Socket socket) {
+        this.socket = socket;
         ArrayList<Player> players = new ArrayList<>();
         gameField = new GameField(players);
-        new GameWindow(gameField, width, height);
+        new GameWindow(socket, gameField, width, height);
 
         (new Thread(this)).start();
     }
@@ -38,7 +41,6 @@ public class Game implements Runnable {
         while (true) {
             now = System.nanoTime();
             if (now - lastFrame >= timePerFrame) {
-                outRequest.println("-");
                 gameField.repaint();
                 lastFrame = now;
                 frames++;

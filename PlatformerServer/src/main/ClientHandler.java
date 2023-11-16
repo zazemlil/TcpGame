@@ -7,16 +7,13 @@ import java.util.ArrayList;
 
 public class ClientHandler implements Runnable {
     private int id;
-    private Socket clientSocket;
+    private final Socket clientSocket;
     private volatile ArrayList<Player> players;
-    private ObjectOutputStream outObj;
-    private ObjectInputStream inObj;
+    private Player my;
+    private static final int SERVER_FPS_SET = 1000;
 
-
-    public ClientHandler(Socket client, ArrayList<Player> player, int id) throws IOException {
-        outObj = new ObjectOutputStream(client.getOutputStream());
-        inObj = new ObjectInputStream(client.getInputStream());
-
+    public ClientHandler(Socket client, ArrayList<Player> player, int id) {
+        my = null;
         this.players = player;
         this.id = id;
         this.clientSocket = client;
@@ -25,22 +22,39 @@ public class ClientHandler implements Runnable {
 
     @Override
     public void run() {
-        Player my = null;
         try {
-            my = new Player(100, 100, 200, 200);
+            my = new Player(100, 100);
             players.add(my);
-            while (!clientSocket.isClosed()) {
-                my.update();
-                outObj.writeObject(players);
-                outObj.reset();
-                new RequestReader(clientSocket, my);
-            }
+            new ClientUpdater(clientSocket, players);
+            new RequestReader(clientSocket, my);
+            startLoop();
         }
         catch (IOException e) {
             System.out.println("Error handling client");
         }
         finally {
             players.remove(my);
+        }
+    }
+
+    private void startLoop() {
+        double timePerFrame = 1000000000.0 / SERVER_FPS_SET;
+        long lastFrame = System.nanoTime();
+        long now = 0;
+        int frames = 0;
+        long lastCheck = System.currentTimeMillis();
+        while (my.getActive()) {
+            now = System.nanoTime();
+            if (now - lastFrame >= timePerFrame) {
+                my.update();
+                lastFrame = now;
+                frames++;
+            }
+            if (System.currentTimeMillis() - lastCheck >= 1000) {
+                lastCheck = System.currentTimeMillis();
+                System.out.println(frames);
+                frames = 0;
+            }
         }
     }
 }

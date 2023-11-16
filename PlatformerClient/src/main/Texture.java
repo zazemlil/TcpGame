@@ -2,7 +2,6 @@ package main;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.beans.Transient;
 import java.io.FileInputStream;
 import java.io.IOException;
 
@@ -21,7 +20,6 @@ public class Texture {
         return animations;
     }
 
-    @Transient
     private void loadAnimations() {
         animations = new BufferedImage[3][14];
 
@@ -36,7 +34,6 @@ public class Texture {
         }
     }
 
-    @Transient
     private void importImage() {
         try {
             imgRun = ImageIO.read(new FileInputStream("res/run.png"));
