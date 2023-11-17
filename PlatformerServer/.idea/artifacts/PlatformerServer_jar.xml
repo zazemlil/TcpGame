@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" build-on-make="true" name="PlatformerServer:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/PlatformerServer_jar</output-path>
-    <root id="archive" name="PlatformerServer.jar">
-      <element id="module-output" name="PlatformerServer" />
-    </root>
-  </artifact>
-</component>
