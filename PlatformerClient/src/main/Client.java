@@ -1,5 +1,6 @@
 package main;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
@@ -13,27 +14,28 @@ public class Client {
     private Game game;
     private String host;
     private int port;
-    public Client(String[] args) {
-        host =  "localhost"; // "26.143.189.17";//
-        port = 1234;
-        if (args.length == 2) {
-            host = args[0];
-            port = Integer.parseInt(args[1]);
-            System.out.println(host + " " + port);
-        }
+    public Client(String host, String port) {
+        this.host = host; // "26.143.189.17";//
+        this.port = Integer.parseInt(port);
     }
 
     public void start() throws IOException, ClassNotFoundException {
-        socket = new Socket(host, port);
+        new SwingWorker() {
+            @Override
+            protected Object doInBackground() throws Exception {
+                socket = new Socket(host, port);
 
-        outRequest = new PrintWriter(socket.getOutputStream(), true);
+                outRequest = new PrintWriter(socket.getOutputStream(), true);
 
-        game = new Game(800, 600, socket);
-        game.getGameField().setKeyboardStream(outRequest);
+                game = new Game(800, 600, socket);
+                game.getGameField().setKeyboardStream(outRequest);
 
-        outRequest.println("only for start loop");
+                outRequest.println("only for start loop");
 
-        updatePlayers();
+                updatePlayers();
+                return null;
+            }
+        }.execute();
     }
 
     private void updatePlayers() throws IOException, ClassNotFoundException {

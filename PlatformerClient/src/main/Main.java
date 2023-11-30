@@ -5,7 +5,8 @@ import java.io.IOException;
 
 public class Main extends JFrame {
     public static void main(String[] args) throws IOException, ClassNotFoundException {
-        Client client = new Client(args);
-        client.start();
+        SwingUtilities.invokeLater(() -> {
+            new MenuFrame("Меню", args);
+        });
     }
 }
