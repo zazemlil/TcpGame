@@ -7,7 +7,7 @@ import java.util.ArrayList;
 public class Game implements Runnable {
     private Socket socket;
     private GameField gameField;
-    private final int FPS_SET = 500;
+    private final int FPS_SET = 200;
     private int ping = 0;
 
     public Game(int width, int height, Socket socket) {

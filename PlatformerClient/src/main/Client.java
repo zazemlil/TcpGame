@@ -15,7 +15,7 @@ public class Client {
     private String host;
     private int port;
     public Client(String host, String port) {
-        this.host = host; // "26.143.189.17";//
+        this.host = host; // "26.74.225.31";//
         this.port = Integer.parseInt(port);
     }
 
@@ -23,16 +23,21 @@ public class Client {
         new SwingWorker() {
             @Override
             protected Object doInBackground() throws Exception {
-                socket = new Socket(host, port);
+                try {
+                    socket = new Socket(host, port);
 
-                outRequest = new PrintWriter(socket.getOutputStream(), true);
+                    outRequest = new PrintWriter(socket.getOutputStream(), true);
 
-                game = new Game(800, 600, socket);
-                game.getGameField().setKeyboardStream(outRequest);
+                    game = new Game(800, 600, socket);
+                    game.getGameField().setKeyboardStream(outRequest);
 
-                outRequest.println("only for start loop");
+                    outRequest.println("only for start loop");
 
-                updatePlayers();
+                    updatePlayers();
+                }
+                catch (Exception e){
+                    System.out.println("Exception occurred in client: " + e.getMessage() + '\n' + e.getStackTrace());
+                }
                 return null;
             }
         }.execute();

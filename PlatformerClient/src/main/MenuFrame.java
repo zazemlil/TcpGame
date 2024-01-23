@@ -12,6 +12,7 @@ public class MenuFrame extends JFrame {
 
     public MenuFrame(String title, String[] args) {
         super(title);
+        HandleArgs(args);
         setSize(new Dimension(500, 500));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -40,9 +41,12 @@ public class MenuFrame extends JFrame {
         settingsButton.setSize(200, 40);
         settingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         settingsButton.addActionListener(e -> SwingUtilities.invokeLater(() -> {
-            getContentPane().removeAll();
+            var pane = getContentPane();
+            pane.removeAll();
+            pane.invalidate();
             getContentPane().add(settingsPane);
-            pack();
+            pane.revalidate();
+            pane.repaint();
         }));
 
         menuPane.add(startGameButton);
@@ -62,11 +66,14 @@ public class MenuFrame extends JFrame {
         backButton.setSize(200, 40);
         backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         backButton.addActionListener(e -> SwingUtilities.invokeLater(() -> {
-            getContentPane().removeAll();
-            getContentPane().add(menuPane);
+            var pane = getContentPane();
+            pane.removeAll();
+            pane.invalidate();
+            pane.add(menuPane);
             host = hostField.getText();
             port = portField.getText();
-            pack();
+            pane.revalidate();
+            pane.repaint();
         }));
 
         settingsPane.add(backButton);
@@ -76,6 +83,7 @@ public class MenuFrame extends JFrame {
 
         mainPane.add(menuPane);
         pack();
+        setSize(new Dimension(500, 500));
         setVisible(true);
     }
 
