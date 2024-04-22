@@ -1,5 +1,7 @@
 package input;
 
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.PrintWriter;
@@ -8,8 +10,14 @@ import static utilz.Constants.ClientCommands.*;
 
 public class KeyboardInput implements KeyListener {
     PrintWriter outWriter = null;
+    JPanel panel;
     public void setStream(PrintWriter outWriter) {
         this.outWriter = outWriter;
+    }
+
+    public KeyboardInput(JPanel panel) {
+        this.panel = panel;
+        panel.addKeyListener(this);
     }
 
     @Override
@@ -39,7 +47,35 @@ public class KeyboardInput implements KeyListener {
                 outWriter.println(SPACE);
                 outWriter.flush();
                 break;
+            case KeyEvent.VK_ENTER:
+                JTextField textField = getChatTextField();
+                panel.add(textField);
+                textField.requestFocusInWindow();
+                break;
         }
+    }
+
+    private JTextField getChatTextField() {
+        JTextField textField = new JTextField();
+        textField.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    outWriter.println(CHAT + ":" + textField.getText());
+                    outWriter.flush();
+                    panel.remove(textField);
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
+        textField.setBounds(300, 50, 200, 30);
+        textField.setPreferredSize(new Dimension(200, 30));
+        return textField;
     }
 
     @Override

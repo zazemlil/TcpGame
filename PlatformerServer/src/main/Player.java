@@ -15,6 +15,8 @@ public class Player implements Serializable {
     private int aniIndex = 0;
     private int direction = 0;
     private int health = 100;
+    private String chatMessage = null;
+    private transient long chatLastUpdatedAt = 0;
     private transient volatile ArrayList<Player> players;
     private transient boolean up = false, left = false, down = false, right = false;
     private transient boolean shooting = false;
@@ -65,6 +67,7 @@ public class Player implements Serializable {
 
     public void update() {
         if (!stop) {
+            updateChatMessage();
             updatePosition();
             setAnimation();
             updateAnimationTick();
@@ -181,6 +184,18 @@ public class Player implements Serializable {
     public void move(float deltaX, float deltaY) {
         this.x += deltaX;
         this.y += deltaY;
+    }
+
+    public void sendChatMessage(String message) {
+        chatMessage = message;
+        chatLastUpdatedAt = System.currentTimeMillis();
+    }
+
+    public void updateChatMessage() {
+        if (chatMessage != null && System.currentTimeMillis() - chatLastUpdatedAt > 5000) {
+            chatMessage = null;
+            chatLastUpdatedAt = System.currentTimeMillis();
+        }
     }
 
     private void updatePosition() {

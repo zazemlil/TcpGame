@@ -29,6 +29,11 @@ public class RequestReader implements Runnable {
         request = inReader.readLine();
 
         if (!clientPlayer.getIsDeath()) {
+            if (request.startsWith("CHAT:")) {
+                String message = request.substring(5);
+                clientPlayer.sendChatMessage(message);
+                return;
+            }
             switch (request) {
                 case "BUTTON_W_PRESSED" -> {
                     clientPlayer.setUp(true);

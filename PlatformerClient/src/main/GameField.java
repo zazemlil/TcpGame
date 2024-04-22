@@ -39,8 +39,7 @@ public class GameField extends JPanel {
         this.requestFocusInWindow();
         this.setBackground(Color.darkGray);
 
-        keyboardInput = new KeyboardInput();
-        this.addKeyListener(keyboardInput);
+        keyboardInput = new KeyboardInput(this);
     }
 
     public void setFpsPing(int fps, int ping) {

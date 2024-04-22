@@ -16,6 +16,7 @@ public class Constants {
         public static final String BUTTON_S_RM = "BUTTON_S_REMOVED";
         public static final String BUTTON_D_RM = "BUTTON_D_REMOVED";
         public static final String SPACE_RM = "BUTTON_SPACE_REMOVED";
+        public static final String CHAT = "CHAT";
     }
     public static class PlayerConstants {
         public static final int IDLE = 0;
