@@ -47,7 +47,6 @@ public class ClientUpdater implements Runnable {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Error Thread ClientUpdater");
         }
     }
 }

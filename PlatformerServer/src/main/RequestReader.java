@@ -87,7 +87,7 @@ public class RequestReader implements Runnable {
                 startReading();
             }
         } catch (IOException | NullPointerException e) {
-            System.out.println("Error Thread RequestReader");
+            System.out.println("Client #" + clientPlayer.getId() + " disconnected");
             clientPlayer.setActive(false);
         }
     }

@@ -33,7 +33,7 @@ public class ClientHandler implements Runnable {
             startLoop();
         }
         catch (IOException e) {
-            System.out.println("Error handling client");
+            System.out.println("Client #" + id + " disconnected");
         }
         finally {
             players.remove(my);
@@ -61,7 +61,7 @@ public class ClientHandler implements Runnable {
 
             if (System.currentTimeMillis() - lastCheck >= 1000) {
                 lastCheck = System.currentTimeMillis();
-                System.out.println(frames);
+                System.out.println("TPS #" + id + ": " + frames);
                 frames = 0;
             }
         }
