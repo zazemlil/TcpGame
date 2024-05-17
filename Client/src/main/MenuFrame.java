@@ -30,7 +30,7 @@ public class MenuFrame extends JFrame {
         startGameButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         startGameButton.addActionListener(e -> SwingUtilities.invokeLater(() -> {
             try {
-                new Client(nick, host, port).start();
+                new Client(nick, host, port, this).start();
                 setVisible(false);
             } catch (Exception ex) {
                 setVisible(true);

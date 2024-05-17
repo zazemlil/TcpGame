@@ -16,13 +16,17 @@ public class Client {
     private String host;
     private int port;
 
+    MenuFrame parentWindow;
+
     public boolean inGame = false;
+    private boolean showGameWindow = true;
 
     private long oldTime;
-    public Client(String nick, String host, String port) {
+    public Client(String nick, String host, String port, MenuFrame parent) {
         this.nick = nick;
         this.host = host;
         this.port = Integer.parseInt(port);
+        this.parentWindow = parent;
     }
 
     public void start() throws IOException, ClassNotFoundException {
@@ -31,30 +35,32 @@ public class Client {
             protected Object doInBackground() throws Exception {
                 try {
                     game = new Game(800, 600);
-                    while (true) {
+                    game.getGameField().setClient(Client.this);
+
+                    while (showGameWindow) {
                         socket = new Socket(host, port);
 
                         outRequest = new PrintWriter(socket.getOutputStream(), true);
 
                         game.getGameField().setKeyboardStream(outRequest);
-                        game.getGameField().setClient(Client.this);
 
                         outRequest.println("only for start loop");
 
                         outRequest.println("NICK:" + nick);
 
                         inObj = new ObjectInputStream(socket.getInputStream());
-                        ArrayList<Player> players = null;
-                        updatePlayers(inObj, players);
+                        updatePlayers(inObj);
 
                         game.setCurrentPlayerId();
 
                         inGame = true;
 
-                        while (inGame) updatePlayers(inObj, players);
+                        while (inGame) updatePlayers(inObj);
 
                         socket.close();
                     }
+                    parentWindow.setVisible(true);
+                    game.close();
                 }
                 catch (Exception e){
                     System.out.println("Exception occurred in client: " + e.getMessage() + '\n' + e.getStackTrace());
@@ -64,13 +70,18 @@ public class Client {
         }.execute();
     }
 
-    private void updatePlayers(ObjectInputStream inObj, ArrayList<Player> players) throws IOException, ClassNotFoundException {
-        players = (ArrayList<Player>) inObj.readObject();
+    private void updatePlayers(ObjectInputStream inObj) throws IOException, ClassNotFoundException {
+        ArrayList<Player> players = (ArrayList<Player>) inObj.readObject();
         if(players == null) return;
 
         long currentTime = System.currentTimeMillis();
         game.setPing((int)(currentTime-oldTime));
         oldTime = currentTime;
         game.setPlayers(players);
+    }
+
+    public void exit() {
+        this.showGameWindow = false;
+        this.inGame = false;
     }
 }

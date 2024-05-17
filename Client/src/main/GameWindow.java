@@ -6,15 +6,15 @@ import java.net.Socket;
 public class GameWindow extends JFrame {
     private GameField gameField;
     public GameWindow(GameField gameField, int width, int height) {
+        super();
+        this.setSize(width, height);
         this.gameField = gameField;
 
-        JFrame window = new JFrame();
-        window.setSize(width, height);
-        window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        this.setLocationRelativeTo(null);
 
-        window.add(gameField);
+        this.add(gameField);
 
-        window.setVisible(true);
+        this.setVisible(true);
     }
 }

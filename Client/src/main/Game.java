@@ -1,18 +1,20 @@
 package main;
 
+import java.awt.event.WindowEvent;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 
 public class Game implements Runnable {
     private GameField gameField;
+    private GameWindow window;
     private final int FPS_SET = 200;
     private int ping = 0;
 
     public Game(int width, int height) {
         ArrayList<Player> players = new ArrayList<>();
         gameField = new GameField(players);
-        new GameWindow(gameField, width, height);
+        window = new GameWindow(gameField, width, height);
 
         (new Thread(this)).start();
     }
@@ -61,4 +63,6 @@ public class Game implements Runnable {
             }
         }
     }
+
+    public void close() { window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING)); }
 }

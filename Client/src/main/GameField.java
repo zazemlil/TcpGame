@@ -76,16 +76,28 @@ public class GameField extends JPanel {
             if(item.getId() == currentPlayerId) {
                 if(item.isDeath() && !death_shown) {
                     death_shown = true;
+
                     JButton respawn = new JButton("respawn");
+                    JButton toMenu = new JButton("return to main menu");
+
                     respawn.setSize(200, 40);
                     respawn.setAlignmentX(Component.CENTER_ALIGNMENT);
                     respawn.addActionListener(e -> SwingUtilities.invokeLater(() -> {
+                        GameField.this.remove(respawn);
+                        GameField.this.remove(toMenu);
+                        GameField.this.requestFocus();
                         client.inGame = false;
                         death_shown = false;
-                        GameField.this.remove(respawn);
+                    }));
+
+                    toMenu.setSize(200, 40);
+                    toMenu.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    toMenu.addActionListener(e -> SwingUtilities.invokeLater(() -> {
+                        client.exit();
                     }));
 
                     this.add(respawn);
+                    this.add(toMenu);
                 }
             }
 
