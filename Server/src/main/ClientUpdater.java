@@ -34,7 +34,9 @@ public class ClientUpdater implements Runnable {
                 previousTime = currentTime;
 
                 if (deltaU >= 1) {
-                    outObj.writeObject(players);
+                    synchronized (players) {
+                        outObj.writeObject(players);
+                    }
                     outObj.reset();
                     outObj.flush();
                     frames++;

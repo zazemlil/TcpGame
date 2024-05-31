@@ -25,9 +25,11 @@ public class ClientHandler implements Runnable {
         try {
             my = new Player(100, 100);
             my.setId(id);
-            my.setPlayers(players);
-            players.add(my);
-            my.checkSpawnPoint();
+            synchronized (players) {
+                my.setPlayers(players);
+                players.add(my);
+                my.checkSpawnPoint();
+            }
             new ClientUpdater(clientSocket, players);
             new RequestReader(clientSocket, my);
             startLoop();
@@ -36,7 +38,10 @@ public class ClientHandler implements Runnable {
             System.out.println("Client #" + id + " disconnected");
         }
         finally {
-            players.remove(my);
+            synchronized (players) {
+                players.remove(my);
+                my.setActive(false);
+            }
         }
     }
 

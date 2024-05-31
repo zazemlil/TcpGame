@@ -125,7 +125,10 @@ public class Player implements Serializable {
             if (aniIndex >= getSpriteAmount(playerAction)) {
                 if (playerAction == DEATH) {
                     stop = true;
-                    players.remove(this);
+                    synchronized (players) {
+                        players.remove(this);
+                    }
+                    this.setActive(false);
                 }
                 aniIndex = 0;
                 if (playerAction == ATTACK) {
